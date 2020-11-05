@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+public class Client {
+
+	public static void main(String[] args) {
+		
+		Scanner lesen = new Scanner(System.in);
+		
+		
+		Socket client;
+		try {
+			client = new Socket("localhost", 7777);
+			System.out.println("Client verbunden");
+			
+			OutputStream out = client.getOutputStream();
+			PrintWriter writer =new PrintWriter(out);
+			
+			InputStream in = client.getInputStream();
+			BufferedReader reader = new BufferedReader (new InputStreamReader(in));
+			
+			System.out.print("Eingabe: ");
+			String schreiben = lesen.nextLine();
+			
+			writer.write(schreiben + "\n");
+			writer.flush();
+			
+			String s = null;
+			
+			while((s = reader.readLine()) != null) {
+				System.out.println("Empfangen vom Server: " + s);
+			}
+			reader.close();
+			writer.close();
+			
+			
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+	}
+
+}
